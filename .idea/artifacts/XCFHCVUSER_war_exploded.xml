@@ -1,0 +1,21 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="XCFHCVUSER:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/XCFHCVUSER_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="XCFHCVUSER/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="XCFHCVUSER" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="javax.json.processing-1.0" />
+          <element id="library" level="project" name="Struts 2-2.3.16.3" />
+          <element id="library" level="project" name="Spring-4.1.0.RELEASE" />
+          <element id="library" level="project" name="Hibernate 4.2.2-4.2.2" />
+          <element id="library" level="module" name="SSH2" module-name="XCFHCVUSER" />
+          <element id="library" level="project" name="Spring MVC-4.1.1.RELEASE" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
