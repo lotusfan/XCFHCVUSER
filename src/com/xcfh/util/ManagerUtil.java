@@ -1,6 +1,7 @@
 package com.xcfh.util;
 
 import java.security.MessageDigest;
+import java.util.UUID;
 
 /**
  * Created by xcfh on 2014/10/8.
@@ -72,8 +73,26 @@ public class ManagerUtil {
     /**
      * 邮件发送
      */
-    public static void sendEmail(String subject, String text, String destationEmail) throws Exception{
+    public static void sendEmail(String subject, String text, String destationEmail) throws Exception {
         new SendMail().sendMail(destationEmail, subject, text);
+    }
+
+    /**
+     * 字符串首字母大写
+     */
+    public static String firstCode(String str) {
+        char[] chars = str.toCharArray();
+        chars[0] -= 32;
+        return String.valueOf(chars);
+    }
+
+    /**
+     * 生成一个UID
+     */
+    public static String generateUID() {
+        String s = UUID.randomUUID().toString();
+        //去掉“-”符号
+        return s.substring(0, 8) + s.substring(9, 13) + s.substring(14, 18) + s.substring(19, 23) + s.substring(24);
     }
 
 }

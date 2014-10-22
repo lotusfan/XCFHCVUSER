@@ -1,21 +1,27 @@
 package com.xcfh.usermanager.service.Impl;
 
+import com.xcfh.usermanager.dao.ManagerDao;
+import com.xcfh.usermanager.domain.TbUserinfoEntity;
 import com.xcfh.usermanager.service.ManagerService;
 import com.xcfh.util.Encrypt;
 import com.xcfh.util.ManagerUtil;
+import com.xcfh.util.USERPARAMETER;
 import org.springframework.stereotype.Service;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringReader;
+import javax.annotation.Resource;
+import javax.json.*;
+import javax.json.spi.JsonProvider;
+import java.io.*;
+import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by xcfh on 2014/9/29.
  * 登录：本地登录,三方登录
  * 注册：手机注册，邮箱注册,三方注册
+ * 用户完善、修改信息
  * 修改密码
  * 找回密码：邮箱，手机
  * 邮件发送
@@ -23,35 +29,111 @@ import java.io.StringReader;
  */
 @Service("ManagerServiceImpl")
 public class ManagerServiceImpl implements ManagerService {
+    private ManagerDao managerDao;
+
+    public ManagerDao getManagerDao() {
+        return managerDao;
+    }
+
+    @Resource(name = "ManagerDao")
+    public void setManagerDao(ManagerDao managerDao) {
+
+        this.managerDao = managerDao;
+    }
+
     /**
      * 用户登录
+     * json: uname, pword, flag(第三方登录为TH,本地登录为LO)
      */
     public void userLogin(Object object, OutputStream outputStream) {
 
         JsonObject js = (JsonObject) object;
         System.out.println(js.toString());
+        String flag = js.getString("flag");
+        String uname = js.getString("uname");
+        String pword = js.getString("pword");
+        String msg = null;
+        String uid = null;
 
-    }
+        List list = managerDao.SByNameAndPassword(uname, pword);
+        if (list == null || list.size() == 0) {
+            if ("LO".equals(flag)) {
+                msg = "F";
+                uid = "F";
+            } else if ("TH".equals(flag)) {
+                //三方登录
+                uid = thplatRegister(js);
+                msg = "T";
+            }
+        } else if (list.size() == 1) {
+            msg = "T";
+            uid = ((TbUserinfoEntity) list.get(0)).getUid();
+        }
 
-    /**
-     * 本地登录
-     */
-    public void userLocalLogin() {
-
-    }
-
-    /**
-     * 三方登录
-     */
-    public void userThirdLogin() {
+        writeOS(outputStream,
+                Json.createObjectBuilder()
+                        .add("msg", msg)
+                        .add("uid", uid)
+                        .build());
 
     }
 
 
     /**
      * 用户注册
+     * json: uname, pword
      */
     public void userRegister(Object object, OutputStream outputStream) {
+
+        JsonObject js = (JsonObject) object;
+        System.out.println(js.toString());
+
+        String uname = js.getString("uname");
+        String msg = null;
+        String uid = null;
+        String msgnum = null;
+
+        try {
+            if (ManagerUtil.EmailFormat(uname) || ManagerUtil.PhoneFormat(uname)) {
+
+                if (proveUname(uname)) {
+                    msg = USERPARAMETER.FAIL;
+                    msgnum = USERPARAMETER.USERNAMEREPEAT;
+                    uid = USERPARAMETER.FAIL;
+                    return;
+                }
+
+                TbUserinfoEntity userinfoEntity = (TbUserinfoEntity) generateOB(js, TbUserinfoEntity.class);
+                userinfoEntity.setUid(ManagerUtil.generateUID());
+
+                if (ManagerUtil.EmailFormat(uname)) {
+                    userinfoEntity.setEtEmail(uname);
+                    managerDao.addUser(userinfoEntity);
+                    sendEmailActivate(uname, uid);
+                } else {
+                    phoneRegister();
+                }
+                msg = USERPARAMETER.SUCCESS;
+                msgnum = USERPARAMETER.SUCCESS;
+                uid = userinfoEntity.getUid();
+
+            } else {
+                msg = USERPARAMETER.FAIL;
+                uid = USERPARAMETER.FAIL;
+                msgnum = USERPARAMETER.USERNAMENOFORMAT;
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        } finally {
+            writeOS(outputStream,
+                    Json.createObjectBuilder()
+                            .add("msg", msg)
+                            .add("uid", uid)
+                            .add("msgnum", msgnum)
+                            .build());
+        }
+
 
     }
 
@@ -65,15 +147,107 @@ public class ManagerServiceImpl implements ManagerService {
     /**
      * 邮箱用户注册
      */
-    public void emailRegister() {
+    public void emailRegister(String uname, String uid) {
 
+
+    }
+
+    /**
+     * 三方用户注册
+     */
+    public String thplatRegister(JsonObject jsonObject) {
+
+        String uid;
+        TbUserinfoEntity userinfoEntity = (TbUserinfoEntity) generateOB(jsonObject, TbUserinfoEntity.class);
+        userinfoEntity.setUid(uid = ManagerUtil.generateUID());
+        managerDao.addUser(userinfoEntity);
+        return uid;
+    }
+
+    /**
+     * 用户信息完善、修改
+     *
+     * @param object
+     * @param outputStream json:全量
+     */
+    @Override
+    public void userConsummate(Object object, OutputStream outputStream) {
+        JsonObject jsonObject = (JsonObject) object;
+        String msg = null;
+        String msgnum = null;
+        String uid = jsonObject.getString("uid");
+        try {
+            List list = managerDao.SByUid(uid);
+            if (list == null || list.size() == 0) {
+                msg = USERPARAMETER.FAIL;
+                msgnum = USERPARAMETER.UIDNOEXIST;
+                return;
+            }
+            TbUserinfoEntity userinfoEntity = (TbUserinfoEntity) list.get(0);
+            userinfoEntity = (TbUserinfoEntity) generateOB(jsonObject, userinfoEntity.getClass());
+            managerDao.addUser(userinfoEntity);
+            msg = USERPARAMETER.SUCCESS;
+            msgnum = USERPARAMETER.SUCCESS;
+
+        } catch (Exception e) {
+            msg = USERPARAMETER.FAIL;
+            msgnum = USERPARAMETER.FAIL;
+            System.out.println(e.toString());
+        } finally {
+            writeOS(outputStream,
+                    Json.createObjectBuilder()
+                            .add("msg", msg)
+                            .add("msgnum", msgnum)
+                            .build());
+        }
+    }
+
+    /**
+     * 验证用户是否重复
+     * 重复true, 不重复false
+     */
+    public boolean proveUname(String uname) {
+        boolean flag = false;
+        List list = managerDao.SByUname(uname);
+        if (list != null && list.size() > 0) flag = true;
+        return flag;
     }
 
 
     /**
      * 修改密码
+     * json: uid, pword, uname
      */
     public void alertPw(Object object, OutputStream outputStream) {
+
+        JsonObject jsonObject = (JsonObject) object;
+        String msg = null;
+        String msgnum = null;
+
+        try {
+            List list = managerDao.SByUidAndPassword(jsonObject.getString("uid"), jsonObject.getString("pword"));
+            if (list == null || list.size() == 0) {
+                msg = USERPARAMETER.FAIL;
+                msgnum = USERPARAMETER.OLDPAWWORDERROR;
+                return;
+            }
+            TbUserinfoEntity userinfoEntity = (TbUserinfoEntity) list.get(0);
+            userinfoEntity = (TbUserinfoEntity) generateOB(jsonObject, userinfoEntity.getClass());
+            managerDao.alertUser(userinfoEntity);
+            msg = USERPARAMETER.SUCCESS;
+            msgnum = USERPARAMETER.SUCCESS;
+        } catch (Exception e) {
+            msg = USERPARAMETER.FAIL;
+            msgnum = USERPARAMETER.FAIL;
+            System.out.println(e.toString());
+        } finally {
+            writeOS(outputStream,
+                    Json.createObjectBuilder()
+                            .add("msg", msg)
+                            .add("msgnum", msgnum)
+                            .build());
+        }
+
 
     }
 
@@ -107,11 +281,11 @@ public class ManagerServiceImpl implements ManagerService {
     /**
      * OutputStream返回
      */
-    public void wirteOS(OutputStream outputStream, byte[] content) {
+    public void writeOS(OutputStream outputStream, JsonObject jsonObject) {
 
         try {
-
-            outputStream.write(content);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(jsonObject.toString().getBytes());
+            outputStream.write(Encrypt.ensecret(byteArrayInputStream));
             outputStream.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,6 +297,27 @@ public class ManagerServiceImpl implements ManagerService {
             }
         }
 
+    }
+
+    public Object generateOB(JsonObject jsonObject, Class comclass) {
+
+        try {
+            Set jsonset = jsonObject.keySet();
+            Iterator iterator = jsonset.iterator();
+            String key;
+            Object o = comclass.newInstance();
+            while (iterator.hasNext()) {
+                key = (String) iterator.next();
+                Method method = comclass.getMethod("set" + ManagerUtil.firstCode(key));
+                method.invoke(o, jsonObject.getString(key));
+            }
+            return o;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 

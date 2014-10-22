@@ -1,6 +1,7 @@
 package com.xcfh.usermanager.service;
 
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 /**
@@ -13,30 +14,14 @@ public interface ManagerService {
     public void userLogin(Object  object, OutputStream outputStream);
 
     /**
-     * 本地登录
-     */
-    public void userLocalLogin();
-
-    /**
-     * 三方登录
-     */
-    public void userThirdLogin();
-
-
-    /**
      * 用户注册
      */
     public void userRegister(Object  object, OutputStream outputStream);
 
     /**
-     * 手机用户注册
+     * 用户完善信息
      */
-    public void phoneRegister();
-
-    /**
-     * 邮箱用户注册
-     */
-    public void emailRegister();
+    public void userConsummate(Object object, OutputStream outputStream);
 
 
     /**

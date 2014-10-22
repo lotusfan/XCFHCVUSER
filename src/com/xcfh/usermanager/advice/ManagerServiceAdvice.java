@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.lang.reflect.Method;
@@ -33,7 +34,9 @@ public class ManagerServiceAdvice implements MethodBeforeAdvice {
         JsonObject json = null;
         try {
             byte[] jsonbyte = Encrypt.desecret(inputStream);
-            json = (Json.createReader(new StringReader(new String(jsonbyte, Charset.forName("utf-8"))))).readObject();
+            JsonReader jsonReader = Json.createReader(new StringReader(new String(jsonbyte, Charset.forName("utf-8"))));
+            json = jsonReader.readObject();
+            jsonReader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

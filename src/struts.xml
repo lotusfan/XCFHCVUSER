@@ -7,4 +7,5 @@
 <struts>
     <constant name="struts.custom.i18n.resources" value="global" />
     <constant name="struts.objectFactory" value="org.apache.struts2.spring.StrutsSpringObjectFactory"/>
+    <constant name="struts.convention.package.locators" value="controller"></constant>
 </struts>

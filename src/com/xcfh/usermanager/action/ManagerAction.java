@@ -1,6 +1,9 @@
 package com.xcfh.usermanager.action;
 
+import com.opensymphony.xwork2.ActionSupport;
 import com.xcfh.usermanager.service.ManagerService;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
 
 import javax.annotation.Resource;
 
@@ -11,7 +14,8 @@ import javax.annotation.Resource;
  * 修改密码
  * 找回密码
  */
-public class ManagerAction {
+@Namespace("/")
+public class ManagerAction extends ActionSupport{
     private ManagerService managerService;
 
     public ManagerService getManagerService() {
@@ -26,6 +30,7 @@ public class ManagerAction {
     /**
      * 用户登录
      */
+    @Action(value = "userlogin")
     public void userLogin() {
 
     }
@@ -33,6 +38,7 @@ public class ManagerAction {
     /**
      * 用户注册
      */
+    @Action(value = "userregister")
     public void userRegister() {
 
 
@@ -41,6 +47,7 @@ public class ManagerAction {
     /**
      * 修改密码
      */
+    @Action(value = "alertpw")
     public void alertPw() {
 
     }
@@ -48,6 +55,7 @@ public class ManagerAction {
     /**
      * 找回密码
      */
+    @Action(value = "backpw")
     public void backPw() {
 
     }
