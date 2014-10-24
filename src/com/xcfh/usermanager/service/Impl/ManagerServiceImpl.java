@@ -1,6 +1,7 @@
 package com.xcfh.usermanager.service.Impl;
 
 import com.xcfh.usermanager.dao.ManagerDao;
+import com.xcfh.usermanager.domain.TbUrlsessEntity;
 import com.xcfh.usermanager.domain.TbUserinfoEntity;
 import com.xcfh.usermanager.service.ManagerService;
 import com.xcfh.util.Encrypt;
@@ -239,7 +240,7 @@ public class ManagerServiceImpl implements ManagerService {
         } catch (Exception e) {
             msg = USERPARAMETER.FAIL;
             msgnum = USERPARAMETER.FAIL;
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         } finally {
             writeOS(outputStream,
                     Json.createObjectBuilder()
@@ -253,8 +254,33 @@ public class ManagerServiceImpl implements ManagerService {
 
     /**
      * 找回密码
+     * json:uname
      */
     public void backPw(Object object, OutputStream outputStream) {
+        JsonObject jsonObject = (JsonObject) object;
+        String uname = jsonObject.getString("uname");
+        String msg = USERPARAMETER.FAIL;
+        String msgnum = USERPARAMETER.FAIL;
+        try {
+            List list = managerDao.SByUname(uname);
+            if (list == null || list.size() == 0) {
+                msgnum = USERPARAMETER.USERNAMENOEXIST;
+                return;
+            }
+            TbUserinfoEntity userinfoEntity = (TbUserinfoEntity) list.get(0);
+            sendEmailBack(userinfoEntity.getEtEmail(), userinfoEntity.getUid());
+            msg = USERPARAMETER.SUCCESS;
+            msg = USERPARAMETER.SUCCESS;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            writeOS(outputStream,
+                    Json.createObjectBuilder()
+                            .add("msg", msg)
+                            .add("msgnum", msgnum)
+                            .build());
+        }
+
 
     }
 
@@ -263,9 +289,15 @@ public class ManagerServiceImpl implements ManagerService {
      */
     public void sendEmailActivate(String desEmail, String uid) throws Exception {
 
-        String text = ""; //内容
-        String subject = "";//主题
+        JsonObject jsonObject = addURLSession(uid);
+        String uidMD5 = jsonObject.getString("uidMD5");
+        String sid = jsonObject.getString("sid");
+        String text = "http://www.xcfh?" +
+                "uid=" + uidMD5 +
+                "sid=" + sid; //内容
+        String subject = "激活邮箱验证";//主题
         ManagerUtil.sendEmail(subject, text, desEmail);
+
     }
 
     /**
@@ -273,8 +305,13 @@ public class ManagerServiceImpl implements ManagerService {
      */
     public void sendEmailBack(String desEmail, String uid) throws Exception {
 
-        String text = ""; //内容
-        String subject = "";//主题
+        JsonObject jsonObject = addURLSession(uid);
+        String uidMD5 = jsonObject.getString("uidMD5");
+        String sid = jsonObject.getString("sid");
+        String text = "http://www.xcfh?" +
+                "uid=" + uidMD5 +
+                "sid=" + sid; //内容
+        String subject = "邮箱找回密码";//主题
         ManagerUtil.sendEmail(subject, text, desEmail);
     }
 
@@ -320,6 +357,30 @@ public class ManagerServiceImpl implements ManagerService {
         return null;
     }
 
+    public JsonObject addURLSession(String uid) {
+
+        String sid = ManagerUtil.generateUID();
+        String uidMD5 = ManagerUtil.EncryptMD5(uid);
+        String msg = USERPARAMETER.SUCCESS;
+        try {
+            TbUrlsessEntity tbUrlsessEntity = new TbUrlsessEntity();
+            tbUrlsessEntity.setSid(sid);
+            tbUrlsessEntity.setUid(uid);
+            tbUrlsessEntity.setUidMd5(uidMD5);
+            tbUrlsessEntity.setTimeMs(System.currentTimeMillis() + "");
+            tbUrlsessEntity.setState(USERPARAMETER.ACTIVASTATENO);
+            managerDao.addURLSession(tbUrlsessEntity);
+        } catch (Exception e) {
+            msg = USERPARAMETER.FAIL;
+            System.out.println(e.toString());
+        }
+        return Json.createObjectBuilder()
+                .add("sid", sid)
+                .add("udiMD5", uidMD5)
+                .add("msg", msg)
+                .build();
+
+    }
 
 }
 

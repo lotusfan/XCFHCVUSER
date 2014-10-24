@@ -48,6 +48,7 @@
         <property name="annotatedClasses">
             <list>
                 <value>com.xcfh.usermanager.domain.TbUserinfoEntity</value>
+                <value>com.xcfh.usermanager.domain.TbUrlsessEntity</value>
             </list>
         </property>
         <property name="hibernateProperties">
