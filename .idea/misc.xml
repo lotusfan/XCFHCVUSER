@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
+=======
+>>>>>>> 2ca70276212e0e639d4a3fe0ee0268b2736f9696
   <component name="IdProvider" IDEtalkID="D2112E0D6B6D81F9DD75AB506275F79E" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
+<<<<<<< HEAD
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
+=======
+>>>>>>> 2ca70276212e0e639d4a3fe0ee0268b2736f9696
 </project>
 

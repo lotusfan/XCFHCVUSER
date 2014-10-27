@@ -9,9 +9,12 @@
         <webroots>
           <root url="file://$MODULE_DIR$/web" relative="/" />
         </webroots>
+<<<<<<< HEAD
         <sourceRoots>
           <root url="file://$MODULE_DIR$/src" />
         </sourceRoots>
+=======
+>>>>>>> 2ca70276212e0e639d4a3fe0ee0268b2736f9696
       </configuration>
       <facet type="Struts2" name="Struts 2">
         <configuration>
@@ -25,18 +28,26 @@
     </facet>
     <facet type="Spring" name="Spring">
       <configuration>
+<<<<<<< HEAD
         <fileset id="fileset" name="Spring Application Context" removed="false">
           <file>file://$MODULE_DIR$/src/spring-config.xml</file>
           <file>file://$MODULE_DIR$/web/WEB-INF/spring-config.xml</file>
           <file>file://$MODULE_DIR$/web/WEB-INF/spring-config.xml</file>
         </fileset>
+=======
+        <fileset id="fileset" name="Spring Application Context" removed="false" />
+>>>>>>> 2ca70276212e0e639d4a3fe0ee0268b2736f9696
       </configuration>
     </facet>
     <facet type="hibernate" name="Hibernate">
       <configuration>
+<<<<<<< HEAD
         <datasource-map>
           <unit-entry name="sessionFactory" value="af4db307-8fce-4edb-ab0e-e5eb11942bba" />
         </datasource-map>
+=======
+        <datasource-map />
+>>>>>>> 2ca70276212e0e639d4a3fe0ee0268b2736f9696
         <naming-strategy-map />
       </configuration>
     </facet>
@@ -45,7 +56,10 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+<<<<<<< HEAD
       <sourceFolder url="file://$MODULE_DIR$/out" type="java-resource" />
+=======
+>>>>>>> 2ca70276212e0e639d4a3fe0ee0268b2736f9696
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -64,7 +78,10 @@
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
+<<<<<<< HEAD
     <orderEntry type="library" name="Spring MVC-4.1.1.RELEASE" level="project" />
+=======
+>>>>>>> 2ca70276212e0e639d4a3fe0ee0268b2736f9696
   </component>
 </module>
 
