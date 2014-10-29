@@ -3,7 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-<<<<<<< HEAD
  <!--   <filter>
         <filter-name>struts2</filter-name>
         <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
@@ -28,17 +27,11 @@
                 com.opensymphony.xwork2.util.logging.commons.CommonsLoggerFactory
             </param-value>
         </init-param>
-=======
-    <filter>
-        <filter-name>struts2</filter-name>
-        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
->>>>>>> 2ca70276212e0e639d4a3fe0ee0268b2736f9696
     </filter>
     <filter-mapping>
         <filter-name>struts2</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-<<<<<<< HEAD
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
@@ -46,6 +39,4 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-=======
->>>>>>> 2ca70276212e0e639d4a3fe0ee0268b2736f9696
 </web-app>

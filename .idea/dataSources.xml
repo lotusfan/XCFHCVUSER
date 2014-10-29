@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="3036903909">
+  <component name="DataSourceManagerImpl" format="xml" hash="2334099546">
     <data-source source="LOCAL" name="MySQL - XCFHCV" uuid="af4db307-8fce-4edb-ab0e-e5eb11942bba">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/xcfh?useUnicode=true&amp;characterEncoding=UTF-8</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost/xcfh</jdbc-url>
       <user-name>root</user-name>
       <user-password>df9bdf98df99df9edf9fdf9c</user-password>
       <driver-properties>

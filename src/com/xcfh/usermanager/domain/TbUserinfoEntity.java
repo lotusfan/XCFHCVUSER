@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by zhangfan on 2014/10/21.
+ * Created by zhangfan on 2014/10/29.
  */
 @Entity
 @Table(name = "tb_userinfo", schema = "", catalog = "xcfh")
@@ -22,6 +22,7 @@ public class TbUserinfoEntity {
     private Timestamp etTimstep;
     private String uname;
     private String pword;
+    private String validateflag;
 
     @Id
     @Column(name = "u_id", nullable = false, insertable = true, updatable = true, length = 32)
@@ -153,6 +154,16 @@ public class TbUserinfoEntity {
         this.pword = pword;
     }
 
+    @Basic
+    @Column(name = "validateflag", nullable = true, insertable = true, updatable = true, length = 5)
+    public String getValidateflag() {
+        return validateflag;
+    }
+
+    public void setValidateflag(String validateflag) {
+        this.validateflag = validateflag;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -178,6 +189,7 @@ public class TbUserinfoEntity {
         if (pword != null ? !pword.equals(that.pword) : that.pword != null) return false;
         if (uid != null ? !uid.equals(that.uid) : that.uid != null) return false;
         if (uname != null ? !uname.equals(that.uname) : that.uname != null) return false;
+        if (validateflag != null ? !validateflag.equals(that.validateflag) : that.validateflag != null) return false;
 
         return true;
     }
@@ -197,6 +209,7 @@ public class TbUserinfoEntity {
         result = 31 * result + (etTimstep != null ? etTimstep.hashCode() : 0);
         result = 31 * result + (uname != null ? uname.hashCode() : 0);
         result = 31 * result + (pword != null ? pword.hashCode() : 0);
+        result = 31 * result + (validateflag != null ? validateflag.hashCode() : 0);
         return result;
     }
 }

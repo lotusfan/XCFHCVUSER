@@ -2,10 +2,13 @@ package com.xcfh.usermanager.action;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.xcfh.usermanager.service.ManagerService;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 
 import javax.annotation.Resource;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Created by xcfh on 2014/9/29.
@@ -15,7 +18,7 @@ import javax.annotation.Resource;
  * 找回密码
  */
 @Namespace("/")
-public class ManagerAction extends ActionSupport{
+public class ManagerAction extends ActionSupport {
     private ManagerService managerService;
 
     public ManagerService getManagerService() {
@@ -33,6 +36,13 @@ public class ManagerAction extends ActionSupport{
     @Action(value = "userlogin")
     public void userLogin() {
 
+        try {
+            InputStream in = ServletActionContext.getRequest().getInputStream();
+            OutputStream out = ServletActionContext.getResponse().getOutputStream();
+            managerService.userLogin(in, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -41,7 +51,13 @@ public class ManagerAction extends ActionSupport{
     @Action(value = "userregister")
     public void userRegister() {
 
-
+        try {
+            InputStream in = ServletActionContext.getRequest().getInputStream();
+            OutputStream out = ServletActionContext.getResponse().getOutputStream();
+            managerService.userRegister(in, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -50,6 +66,13 @@ public class ManagerAction extends ActionSupport{
     @Action(value = "alertpw")
     public void alertPw() {
 
+        try {
+            InputStream in = ServletActionContext.getRequest().getInputStream();
+            OutputStream out = ServletActionContext.getResponse().getOutputStream();
+            managerService.alertPw(in, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -57,7 +80,13 @@ public class ManagerAction extends ActionSupport{
      */
     @Action(value = "backpw")
     public void backPw() {
-
+        try {
+            InputStream in = ServletActionContext.getRequest().getInputStream();
+            OutputStream out = ServletActionContext.getResponse().getOutputStream();
+            managerService.backPw(in, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

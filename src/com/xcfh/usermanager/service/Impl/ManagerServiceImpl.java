@@ -61,8 +61,7 @@ public class ManagerServiceImpl implements ManagerService {
             if ("LO".equals(flag)) {
                 msg = "F";
                 uid = "F";
-            } else if ("TH".equals(flag)) {
-                //三方登录
+            } else if ("TH".equals(flag)) {//三方注册
                 uid = thplatRegister(js);
                 msg = "T";
             }
@@ -82,7 +81,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     /**
      * 用户注册
-     * json: uname, pword
+     * json: uname, pword(前台MD5加密）
      */
     public void userRegister(Object object, OutputStream outputStream) {
 
@@ -95,9 +94,9 @@ public class ManagerServiceImpl implements ManagerService {
         String msgnum = null;
 
         try {
-            if (ManagerUtil.EmailFormat(uname) || ManagerUtil.PhoneFormat(uname)) {
+            if (ManagerUtil.EmailFormat(uname) || ManagerUtil.PhoneFormat(uname)) {//手机，邮箱格式验证
 
-                if (proveUname(uname)) {
+                if (proveUname(uname)) {//用户名是否重复
                     msg = USERPARAMETER.FAIL;
                     msgnum = USERPARAMETER.USERNAMEREPEAT;
                     uid = USERPARAMETER.FAIL;
@@ -107,11 +106,12 @@ public class ManagerServiceImpl implements ManagerService {
                 TbUserinfoEntity userinfoEntity = (TbUserinfoEntity) generateOB(js, TbUserinfoEntity.class);
                 userinfoEntity.setUid(ManagerUtil.generateUID());
 
-                if (ManagerUtil.EmailFormat(uname)) {
+                if (ManagerUtil.EmailFormat(uname)) {//邮箱注册
                     userinfoEntity.setEtEmail(uname);
+                    userinfoEntity.setValidateflag(USERPARAMETER.VALIDATESTATENO);
                     managerDao.addUser(userinfoEntity);
                     sendEmailActivate(uname, uid);
-                } else {
+                } else {//手机注册
                     phoneRegister();
                 }
                 msg = USERPARAMETER.SUCCESS;
@@ -217,7 +217,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     /**
      * 修改密码
-     * json: uid, pword, uname
+     * json: uid, pword（前台MD5加密）
      */
     public void alertPw(Object object, OutputStream outputStream) {
 
@@ -268,6 +268,10 @@ public class ManagerServiceImpl implements ManagerService {
                 return;
             }
             TbUserinfoEntity userinfoEntity = (TbUserinfoEntity) list.get(0);
+            if (USERPARAMETER.VALIDATESTATENO.equals(userinfoEntity.getValidateflag())) {
+                msgnum = USERPARAMETER.VALIDATESTATENO;
+                return;
+            }
             sendEmailBack(userinfoEntity.getEtEmail(), userinfoEntity.getUid());
             msg = USERPARAMETER.SUCCESS;
             msg = USERPARAMETER.SUCCESS;
@@ -336,6 +340,14 @@ public class ManagerServiceImpl implements ManagerService {
 
     }
 
+    /**
+     * 用反射生成一个实体类
+     *
+     * @param jsonObject
+     * @param comclass
+     * @return
+     */
+
     public Object generateOB(JsonObject jsonObject, Class comclass) {
 
         try {
@@ -357,6 +369,11 @@ public class ManagerServiceImpl implements ManagerService {
         return null;
     }
 
+    /**
+     * 添加邮件里地址的Session控制
+     * @param uid
+     * @return
+     */
     public JsonObject addURLSession(String uid) {
 
         String sid = ManagerUtil.generateUID();
@@ -368,7 +385,7 @@ public class ManagerServiceImpl implements ManagerService {
             tbUrlsessEntity.setUid(uid);
             tbUrlsessEntity.setUidMd5(uidMD5);
             tbUrlsessEntity.setTimeMs(System.currentTimeMillis() + "");
-            tbUrlsessEntity.setState(USERPARAMETER.ACTIVASTATENO);
+            tbUrlsessEntity.setState(USERPARAMETER.ACTIVASTATIYES);
             managerDao.addURLSession(tbUrlsessEntity);
         } catch (Exception e) {
             msg = USERPARAMETER.FAIL;
