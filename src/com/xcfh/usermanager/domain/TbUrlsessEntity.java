@@ -9,12 +9,12 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "tb_urlsess", schema = "", catalog = "xcfh")
 public class TbUrlsessEntity {
-    private String sid;
-    private String uid;
-    private String uidMd5;
-    private String state;
-    private String timeMs;
-    private Timestamp timestamp;
+    private String sid;// ID
+    private String uid;// 用户UID
+    private String uidMd5;//加密UID
+    private String state;//状态码
+    private String timeMs;//毫秒时间数
+    private Timestamp timestamp;//数据库时间戳（数据库自动生成，不用在程序里添加）
 
     @Id
     @Column(name = "sid", nullable = false, insertable = true, updatable = true, length = 32)

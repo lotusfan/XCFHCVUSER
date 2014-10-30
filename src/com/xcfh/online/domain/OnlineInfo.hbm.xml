@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.xcfh.comm.onlineinfo.domain.OnlineInfo" table="Tb_info_online">
+        <id name="com_onl_id" type="java.lang.String">
+            <column name="com_onl_id"/>
+            <generator class="uuid"></generator>
+        </id>
+        <property name="com_u_id" type="java.lang.String">
+            <column name="com_u_id" />
+        </property>
+        <property name="com_onl_mac" type="java.lang.String">
+            <column name="com_onl_mac"/>
+        </property>
+        <property name="com_onl_imei" type="java.lang.String">
+            <column name="com_onl_imei" />
+        </property>
+        <property name="com_onl_time" type="java.lang.String">
+            <column name="com_onl_time" />
+        </property>
+        <property name="com_onl_ip" type="java.lang.String">
+            <column name="com_onl_ip" />
+        </property>
+        <property name="com_onl_sys_type" type="java.lang.String">
+            <column name="com_onl_sys_type" />
+        </property>
+        <property name="com_onl_ver_sof" type="java.lang.String">
+            <column name="com_onl_ver_sof" />
+        </property>
+        <property name="com_onl_ver_con" type="java.lang.String">
+        	<column name="com_onl_ver_con"></column>
+        </property>
+         <property name="com_onl_ver_mode" type="java.lang.String">
+            <column name="com_onl_ver_mode" />
+        </property>
+        <property name="com_onl_ver_rel" type="java.lang.String">
+        	<column name="com_onl_ver_rel"></column>
+        </property>
+        <property name="com_onl_app_type" type="java.lang.String">
+        	<column name="com_onl_app_type"></column>
+        </property>
+    </class>
+</hibernate-mapping>

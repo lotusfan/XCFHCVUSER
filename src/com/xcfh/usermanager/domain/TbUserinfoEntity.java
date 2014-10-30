@@ -20,9 +20,9 @@ public class TbUserinfoEntity {
     private String companyId;
     private String etPersionIphone;
     private Timestamp etTimstep;
-    private String uname;
-    private String pword;
-    private String validateflag;
+    private String uname;//用户名
+    private String pword;//密码
+    private String validateflag;//激活状态
 
     @Id
     @Column(name = "u_id", nullable = false, insertable = true, updatable = true, length = 32)

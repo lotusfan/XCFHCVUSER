@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ public class EmailDao {
         return hibernateTemplate;
     }
 
+    @Resource(name="HibernateTemplate")
     public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
         this.hibernateTemplate = hibernateTemplate;
     }

@@ -7,13 +7,24 @@ import com.xcfh.usermanager.domain.TbUserinfoEntity;
 import com.xcfh.usermanager.service.EmailService;
 import com.xcfh.util.ManagerUtil;
 import com.xcfh.util.USERPARAMETER;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * Created by zhangfan on 2014/10/27.
  */
+@Service("EmailServiceImpl")
 public class EmailServiceImpl implements EmailService {
+    /**
+     * 邮箱激活验证
+     * 找回密码地址有效性验证
+     * 重置密码
+     * EmailSession验证状态返回
+     * 修改EmailSession状态
+     * 修改密码
+     */
 
     private EmailDao emailDao;
     private ManagerDao managerDao;
@@ -22,6 +33,7 @@ public class EmailServiceImpl implements EmailService {
         return emailDao;
     }
 
+    @Resource(name = "EmailDao")
     public void setEmailDao(EmailDao emailDao) {
         this.emailDao = emailDao;
     }
@@ -30,6 +42,7 @@ public class EmailServiceImpl implements EmailService {
         return managerDao;
     }
 
+    @Resource(name = "ManagerDao")
     public void setManagerDao(ManagerDao managerDao) {
         this.managerDao = managerDao;
     }

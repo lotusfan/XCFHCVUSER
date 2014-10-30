@@ -7,6 +7,8 @@ import com.xcfh.util.USERPARAMETER;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
 
+import javax.annotation.Resource;
+
 /**
  * Created by xcfh on 2014/9/29.
  * 邮箱注册后激活
@@ -46,10 +48,12 @@ public class EmailAtion extends ActionSupport {
         this.reason = reason;
     }
 
+
     public EmailService getEmailService() {
         return emailService;
     }
 
+    @Resource(name="EmailServiceImpl")
     public void setEmailService(EmailService emailService) {
         this.emailService = emailService;
     }
